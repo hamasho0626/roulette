@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charsert="UTF-8">
+        <title>ルーレット</title>
+        <link rel="stylesheet" href="roulette.css">
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script>
+            //グローバル変数用
+            var arr = []; //シャッフルした配列の入れ物
+            var used = []; //選ばれた数字の入れ物
+            var number=0; //
+            var intervalId; //点滅スピードの管理
+            var flag = false;
+            var start;
+            var stop;
+            var reset;
+
+
+            function click_button() {
+                if(flag === false) {
+                    intervalId = setInterval(start_text, 50);
+                    $('#'+used).css('background','pink');
+                    number =0;
+                    flag = true;
+                    $(start).prop('disabled',true);
+                    $(stop).prop('disabled',false);
+                }
+            }
+
+            //スタートボタンを押したときの関数
+            function start_text() {
+                if(number !== arr.length){
+                $("#"+arr[number-1]).css('background','white');
+                var result = arr[number];
+                $("#"+result).css('background','orange');
+                 number++;
+                }else if (number ===arr.length) {
+                    $("#"+arr[number-1]).css('background','white');
+                    number = 0;
+                    shuffle(arr);
+                    var result = arr[number];
+                    $("#"+result).css('background','orange');
+                    number++;
+                }
+            }
+
+            //ストップボタンを押したときの関数
+            function stop_button() {
+                if( flag === true) {
+                clearInterval(intervalId);
+                if(arr.length === 1){
+                    $("#"+arr[number-1]).css('background','white');
+                    used= arr.splice('number','1');
+                    $("#"+used).css('background','pink');
+                }else {
+                    $("#"+arr[number-1]).css('background','white');
+                     used= arr.splice('number','1');
+                    $("#"+used).css('background','red');
+                }
+                flag = false;
+                $(start).prop('disabled',false);
+                $(stop).prop('disabled',true);
+            }
+            }
+
+            //リセットボタンを押したときの関数
+            function reset_button() {
+                clearInterval(intervalId);
+                number = 0;
+                used = [];
+                    console.log(used);
+                arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+                shuffle(arr);
+                $('td').css('background','white');
+                flag = false;
+                $(start).prop('disabled',false);
+                $(stop).prop('disabled',true);
+            }
+
+            //配列をシャッフルする関数
+            function shuffle(arr) {
+                var n = arr.length;
+                var temp, i;
+
+                while(n) {
+                    i = Math.floor(Math.random() *n);
+                    n--;
+                    temp = arr[n]; //回避
+                    arr[n] = arr[i]; //入れ替え
+                    arr[i] = temp; //保存
+                }
+                return arr;
+            }
+
+            //ウィンドウ読み込み時の関数
+            $(function() {
+                //配列をシャッフルする
+                    arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+                    shuffle(arr);
+
+                //ボタンの関数の割り振り
+                start = $('#start').click(click_button);
+                stop = $('#stop').click(stop_button);
+                reset = $('#reset').click(reset_button);
+
+                $(stop).prop('disabled',true);
+
+                //図面の作成、ＩＤの割り振り
+                var count=0;
+                for(var i=1; i<5;i++) {
+                    $('table').append('<tr>');
+                        for(var j=1; j<5; j++) {
+                            count++;
+                            $('tr:nth-child('+i+')').append("<td id='"+count+"'>"+count+"</td>");
+                    }
+                }
+            })
+        </script>
+    </head>
+    <body>
+        <table>
+        </table>
+        <div id="btn">
+            <button id="start" class = "btn">スタート</button>
+            <button id="stop" class ="btn">ストップ</button>
+            <button id="reset" class ="btn">リセット</button>
+        </div>
+    </body>
+</html>
