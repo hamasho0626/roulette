@@ -9,15 +9,15 @@
             //グローバル変数用
             var arr = []; //シャッフルした配列の入れ物
             var used = []; //選ばれた数字の入れ物
-            var number=0; //
+            var number=0; //シャッフルした配列を先頭から読み込むために初期化
             var intervalId; //点滅スピードの管理
-            var flag = false;
+            var flag = false; //各ボタンを実行できるかの管理
             var start;
             var stop;
             var reset;
 
-
-            function click_button() {
+            //スタートボタンを押したときの関数
+            function start_button() {
                 if(flag === false) {
                     intervalId = setInterval(start_text, 50);
                     $('#'+used).css('background','pink');
@@ -28,8 +28,8 @@
                 }
             }
 
-            //スタートボタンを押したときの関数
-            function start_text() {
+            //start_buttonのsetIntervalから呼び出される関数、ルーレットを回す役割
+            function start_called() {
                 if(number !== arr.length){
                 $("#"+arr[number-1]).css('background','white');
                 var result = arr[number];
@@ -45,7 +45,7 @@
                 }
             }
 
-            //ストップボタンを押したときの関数
+            //ストップボタンを押したときの関数、
             function stop_button() {
                 if( flag === true) {
                 clearInterval(intervalId);
@@ -100,10 +100,11 @@
                     shuffle(arr);
 
                 //ボタンの関数の割り振り
-                start = $('#start').click(click_button);
+                start = $('#start').click(start_button);
                 stop = $('#stop').click(stop_button);
                 reset = $('#reset').click(reset_button);
 
+                //初期状態ではストップボタンの使用をできなくしている
                 $(stop).prop('disabled',true);
 
                 //図面の作成、ＩＤの割り振り
